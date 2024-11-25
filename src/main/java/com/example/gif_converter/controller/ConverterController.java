@@ -21,7 +21,7 @@ public class ConverterController {
         this.videoService = videoService;
     }
 
-    @PostMapping("/convert")
+    @PostMapping(value = "/convert", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> convertVideo(@RequestParam("file") MultipartFile file) {
         try {
             String outputFileName = videoService.convertVideo(file);
