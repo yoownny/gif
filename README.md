@@ -1,4 +1,4 @@
-# :bulb:Video to GIF Converter
+# 💡Video to GIF Converter
 Spring Boot와 FFmpeg를 활용한 비디오-GIF 변환 웹 애플리케이션
 
 ## 주요 기능
