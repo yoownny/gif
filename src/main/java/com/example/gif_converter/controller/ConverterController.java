@@ -1,6 +1,8 @@
 package com.example.gif_converter.controller;
 
 import com.example.gif_converter.service.VideoService;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
@@ -36,13 +38,10 @@ public class ConverterController {
         Path filePath = Paths.get(System.getProperty("java.io.tmpdir"), fileName);
         Resource resource = new UrlResource(filePath.toUri());
 
-        if (!resource.exists()) {
-            return ResponseEntity.notFound().build();
-        }
-
         return ResponseEntity.ok()
                 .contentType(MediaType.IMAGE_GIF)
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"" + URLEncoder.encode(fileName, StandardCharsets.UTF_8) + "\"")
                 .body(resource);
     }
 }

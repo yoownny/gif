@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.UUID;
 
 @Service
 public class VideoService {
@@ -19,17 +18,18 @@ public class VideoService {
     }
 
     public String convertVideo(MultipartFile file) throws IOException {
-        String originalFilename = file.getOriginalFilename();
-        String uniqueFilename = UUID.randomUUID() + "_" + originalFilename;
+        String originalName = file.getOriginalFilename();
+        String baseName = originalName.substring(0, originalName.lastIndexOf('.'));
+        String outputName = baseName + ".gif";
 
-        Path inputPath = tempDir.resolve(uniqueFilename);
-        Path outputPath = tempDir.resolve(uniqueFilename.replaceFirst("[.][^.]+$", "") + ".gif");
+        Path inputPath = tempDir.resolve(originalName);
+        Path outputPath = tempDir.resolve(outputName);
 
         Files.copy(file.getInputStream(), inputPath);
 
         try {
             converter.convertVideoToGif(inputPath.toString(), outputPath.toString());
-            return outputPath.getFileName().toString();
+            return outputName;
         } finally {
             Files.deleteIfExists(inputPath);
         }
