@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+// API 엔드포인트를 제공하는 컨트롤러
 @RestController
 @RequestMapping("/api/converter")
 public class ConverterController {
@@ -23,6 +24,7 @@ public class ConverterController {
         this.videoService = videoService;
     }
 
+    // 비디오 파일 업로드 및 GIF 변환 API
     @PostMapping(value = "/convert", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> convertVideo(@RequestParam("file") MultipartFile file) {
         try {
@@ -33,11 +35,14 @@ public class ConverterController {
         }
     }
 
+    // 변환된 GIF 파일 다운로드 API
     @GetMapping("/download/{fileName}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName) throws IOException {
+        // 파일 경로 생성
         Path filePath = Paths.get(System.getProperty("java.io.tmpdir"), fileName);
         Resource resource = new UrlResource(filePath.toUri());
 
+        // 파일 다운로드 응답 생성
         return ResponseEntity.ok()
                 .contentType(MediaType.IMAGE_GIF)
                 .header(HttpHeaders.CONTENT_DISPOSITION,
